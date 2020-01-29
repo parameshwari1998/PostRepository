@@ -1,7 +1,6 @@
 package com.project.postMicroservice.entity;
 
 
-import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
@@ -24,6 +23,6 @@ public class PostVisibility {
     )
     private String postVisibilityId;
     private String postId;
-    private String visibleTo;
+    private String reactedTo;
 
 }
