@@ -25,4 +25,6 @@ public class CommentServiceImpl implements CommentService {
     public List<Comment> getComment(String postId) {
         return commentRepository.findByPostId(postId);
     }
+
+    
 }

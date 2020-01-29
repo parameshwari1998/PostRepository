@@ -73,7 +73,12 @@ public class PostController {
             List<Post> posts=postService.getNewsFeed(userIds,pageNo,pageSize);
             List<PostDto> postDtos=new ArrayList<>();
             BeanUtils.copyProperties(posts,postDtos);
+<<<<<<< HEAD
         //    baseResponse.setData(commentController.getComment(postDtos));
+=======
+            commentController.getCommentsOfPost(postDtos);
+            baseResponse.setData(postDtos);
+>>>>>>> ef1a94f868dd35830c908669d8cd8c2ae13cb16f
             baseResponse.setStatus(true);
         }catch (Exception e){
             baseResponse.setStatus(false);
@@ -81,7 +86,4 @@ public class PostController {
         }
         return baseResponse;
     }
-
-
-
 }
