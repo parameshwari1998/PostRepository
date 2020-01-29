@@ -40,7 +40,7 @@ public class PostController {
 
 
     @GetMapping("/getUserPost")
-    BaseResponse<List<Post>> createPost(@RequestHeader("userId") String userId){
+    BaseResponse<List<Post>> getUserPost(@RequestHeader("userId") String userId){
         BaseResponse<List<Post>> baseResponse=new BaseResponse<>();
         try {
             baseResponse.setData(postService.getPostOfUser(userId));
@@ -73,10 +73,11 @@ public class PostController {
             List<Post> posts=postService.getNewsFeed(userIds,pageNo,pageSize);
             List<PostDto> postDtos=new ArrayList<>();
             BeanUtils.copyProperties(posts,postDtos);
-          //  commentController.getComment()
-            baseResponse.setData(postDtos);
+        //    baseResponse.setData(commentController.getComment(postDtos));
+            baseResponse.setStatus(true);
         }catch (Exception e){
-
+            baseResponse.setStatus(false);
+            baseResponse.setErrorMessage(e.getMessage());
         }
         return baseResponse;
     }
