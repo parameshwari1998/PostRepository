@@ -3,6 +3,7 @@ package com.project.postMicroservice.controller;
 
 import com.project.postMicroservice.dto.BaseResponse;
 import com.project.postMicroservice.dto.CommentDto;
+import com.project.postMicroservice.dto.PostDto;
 import com.project.postMicroservice.entity.Comment;
 import com.project.postMicroservice.service.CommentService;
 import org.springframework.beans.BeanUtils;
@@ -33,6 +34,13 @@ public class CommentController {
             baseResponse.setStatus(false);
         }
         return baseResponse;
+    }
+
+    public List<PostDto> getCommentsOfPost(List<PostDto> postDtos){
+        for (PostDto postDto:postDtos) {
+            postDto.setComments(commentService.getComment(postDto.getPostId()));
+        }
+        return postDtos;
     }
 
 

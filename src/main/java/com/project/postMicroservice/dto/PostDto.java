@@ -12,6 +12,7 @@ import java.util.List;
 @Data
 public class PostDto {
 
+    private String postId;
     private Boolean isBusinessProfilePost;
     private String postDescription;
     private String postImageUrl;
