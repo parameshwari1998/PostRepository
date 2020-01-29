@@ -23,7 +23,7 @@ public class PostVisibility {
             strategy = "org.hibernate.id.UUIDGenerator"
     )
     private String postVisibilityId;
-    private String UserId;
+    private String postId;
     private String visibleTo;
 
 }

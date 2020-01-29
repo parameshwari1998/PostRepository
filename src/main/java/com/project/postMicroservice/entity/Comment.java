@@ -7,8 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Date;
 
 @Entity
+@Data
 @Table(name = Comment.COMMENT_TABLE_NAME)
 public class Comment {
 
@@ -22,10 +24,14 @@ public class Comment {
     )
     private String commentId;
     private String commentDescription;
-    private String PostId;
+    private String postId;
     private String userId;
     private String commentingUserId;
     private String commentDate;
     private String parentCommentId;
+
+    public Comment(){
+        commentDate=new Date().toString();
+    }
 
 }
