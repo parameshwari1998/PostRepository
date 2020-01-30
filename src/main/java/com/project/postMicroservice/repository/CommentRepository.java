@@ -9,5 +9,7 @@ import java.util.List;
 
 @Repository
 public interface CommentRepository extends CrudRepository<Comment,String> {
+
     List<Comment> findByPostId(String postId);
+
 }

@@ -35,12 +35,4 @@ public class Post {
     private Integer counterOfEmojis;
     private Integer counterOfComments;
 
-    public Post(){
-        postDate=new Date();
-        counterOfComments=0;
-        counterOfLikes=0;
-        counterOfDislilkes=0;
-        counterOfEmojis=0;
-    }
-
 }

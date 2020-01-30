@@ -8,11 +8,12 @@ import com.project.postMicroservice.service.PostService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.ArrayList;
 import java.util.List;
 
-
+@CrossOrigin("*")
 @RestController
 @RequestMapping("/post")
 public class PostController {
@@ -23,7 +24,7 @@ public class PostController {
     @Autowired
     CommentController commentController;
 
-    @PostMapping("/createPost")
+    @PostMapping("/create")
     public BaseResponse<Post> createPost(@RequestBody PostDto postDto){
         Post post=new Post();
         BeanUtils.copyProperties(postDto,post);
@@ -39,42 +40,17 @@ public class PostController {
     }
 
 
-    @GetMapping("/getUserPost")
-    BaseResponse<List<Post>> getUserPost(@RequestHeader("userId") String userId){
-        BaseResponse<List<Post>> baseResponse=new BaseResponse<>();
-        try {
-            baseResponse.setData(postService.getPostOfUser(userId));
-            baseResponse.setStatus(true);
-        }catch (Exception e){
-            baseResponse.setErrorMessage(e.getMessage());
-            baseResponse.setStatus(false);
-        }
-        return baseResponse;
-    }
+    @GetMapping("/newsfeed/{userId}/{pageNo}/{pageSize}")
+    BaseResponse<List<PostDto>> getNewsFeed(@PathVariable("userId") String userId,@PathVariable("pageNo") int pageNo,@PathVariable("pageSize") int pageSize){
+        List<String> userIds=new ArrayList<>();
 
-    @GetMapping("/getPost")
-    BaseResponse<Post> getPost(@RequestHeader("postId") String postId){
-        BaseResponse<Post> baseResponse=new BaseResponse<>();
-        try {
-            baseResponse.setData(postService.getPost(postId));
-            baseResponse.setStatus(true);
-        }catch (Exception e){
-            baseResponse.setErrorMessage(e.getMessage());
-            baseResponse.setStatus(false);
-        }
-        return baseResponse;
-    }
+        final String url="http://10.177.68.8:8082/friends/getList/"+userId;
+        RestTemplate restTemplate=new RestTemplate();
+        userIds=restTemplate.getForObject(url,List.class);
 
-
-    @GetMapping("/newsfeed")
-    BaseResponse<List<PostDto>> getNewsFeed(List<String> userIds,int pageNo,int pageSize){
         BaseResponse<List<PostDto>> baseResponse=new BaseResponse<>();
         try {
-            List<Post> posts=postService.getNewsFeed(userIds,pageNo,pageSize);
-            List<PostDto> postDtos=new ArrayList<>();
-            BeanUtils.copyProperties(posts,postDtos);
-            commentController.getCommentsOfPost(postDtos);
-            baseResponse.setData(postDtos);
+            baseResponse.setData(commentController.getCommentsOfPost(postService.getFeed(userIds,pageNo,pageSize)));
             baseResponse.setStatus(true);
         }catch (Exception e){
             baseResponse.setStatus(false);
@@ -82,4 +58,40 @@ public class PostController {
         }
         return baseResponse;
     }
+
+
+    @GetMapping("/getUserPost/{userId}/{pageNo}/{pageSize}")
+    BaseResponse<List<PostDto>> getUserPost(@PathVariable("userId") String userId,@PathVariable("pageNo") int pageNo,@PathVariable("pageSize") int pageSize){
+        BaseResponse<List<PostDto>> baseResponse=new BaseResponse<>();
+        List<String> userIds=new ArrayList<>();
+        userIds.add(userId);
+        try {
+            baseResponse.setData(commentController.getCommentsOfPost(postService.getFeed(userIds,pageNo,pageSize)));
+            baseResponse.setStatus(true);
+        }catch (Exception e){
+            baseResponse.setErrorMessage(e.getMessage());
+            baseResponse.setStatus(false);
+        }
+        return baseResponse;
+    }
+
+
+
+    @GetMapping("/getPost/{postId}")
+    BaseResponse<PostDto> getPost(@PathVariable("postId") String postId){
+        BaseResponse<PostDto> baseResponse=new BaseResponse<>();
+        try {
+            PostDto postDto=new PostDto();
+            BeanUtils.copyProperties(postService.getPost(postId),postDto);
+            postDto.setComments(commentController.getComment(postId).getData());
+            baseResponse.setData(postDto);
+            baseResponse.setStatus(true);
+        }catch (Exception e){
+            baseResponse.setErrorMessage(e.getMessage());
+            baseResponse.setStatus(false);
+        }
+        return baseResponse;
+    }
+
+
 }

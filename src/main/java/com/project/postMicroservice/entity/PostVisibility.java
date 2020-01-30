@@ -1,6 +1,7 @@
 package com.project.postMicroservice.entity;
 
 
+import lombok.Data;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.Entity;
@@ -9,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
+@Data
 @Table(name = PostVisibility.POST_VISIBILITY_TABLE_NAME)
 public class PostVisibility {
 

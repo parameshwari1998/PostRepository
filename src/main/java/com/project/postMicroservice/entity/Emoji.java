@@ -9,6 +9,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 @Entity
+@Data
 @Table(name = Emoji.EMOJI_TABLE_NAME)
 public class Emoji {
 

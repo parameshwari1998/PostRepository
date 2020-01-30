@@ -2,10 +2,7 @@ package com.project.postMicroservice.dto;
 
 import com.project.postMicroservice.entity.Comment;
 import lombok.Data;
-import lombok.Getter;
-import lombok.Setter;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -18,12 +15,21 @@ public class PostDto {
     private String postImageUrl;
     private String postVideoUrl;
     private String userId;
-    private String postDate;
+    private Date postDate;
     private Integer counterOfLikes;
     private Integer counterOfDislilkes;
     private Integer counterOfEmojis;
     private Integer counterOfComments;
     private List<Comment> comments;
+
+
+    public PostDto(){
+        postDate=new Date();
+        counterOfComments=0;
+        counterOfLikes=0;
+        counterOfDislilkes=0;
+        counterOfEmojis=0;
+    }
 
 
 }

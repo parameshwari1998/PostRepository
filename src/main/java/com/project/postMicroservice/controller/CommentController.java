@@ -14,20 +14,23 @@ import java.util.List;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+@CrossOrigin("*")
 @RestController
-@RequestMapping("/post")
+@RequestMapping("/comment")
 public class CommentController {
 
     @Autowired
     CommentService  commentService;
 
-    @PostMapping("/comment")
-    public BaseResponse<String> addComment(@RequestBody CommentDto commentDto) {
+    @PostMapping("/{userId}")
+    public BaseResponse<Comment> addComment(@PathVariable("userId") String userId,@RequestBody CommentDto commentDto) {
+        commentDto.setCommentingUserId(userId);
         Comment commentEntity = new Comment();
         BeanUtils.copyProperties(commentDto, commentEntity);
-        BaseResponse<String> baseResponse = new BaseResponse();
+        BaseResponse<Comment> baseResponse = new BaseResponse();
         try {
             Comment createdcomment = commentService.save(commentEntity);
+            baseResponse.setData(createdcomment);
             baseResponse.setStatus(true);
         } catch (Exception e) {
             baseResponse.setErrorMessage(e.getMessage());
@@ -51,7 +54,7 @@ public class CommentController {
             baseResponse.setStatus(true);
         }catch (Exception e){
             baseResponse.setStatus(false);
-            baseResponse.setErrorMessage("couldnt retrieve");
+            baseResponse.setErrorMessage("couldn't retrieve");
         }
         return baseResponse;
     }

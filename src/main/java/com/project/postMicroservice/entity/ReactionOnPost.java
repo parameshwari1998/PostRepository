@@ -7,8 +7,10 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import java.util.Date;
 
 @Entity
+@Data
 @Table(name = ReactionOnPost.LIKE_ON_POST_TABLE_NAME)
 public class ReactionOnPost {
 
@@ -21,9 +23,10 @@ public class ReactionOnPost {
             name = "UUID",
             strategy = "org.hibernate.id.UUIDGenerator"
     )
-    private String reactedId;
+    private String reactionId;
     private String postId ;
-    private String likedId;
-    private String likeDate;
+    private String reactedUserId;
+    private Date reactedDate;
+    private String reactionType;
 
 }
